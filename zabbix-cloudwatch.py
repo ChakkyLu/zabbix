@@ -15,7 +15,7 @@ def getCloudWatchData(r,s,d):
     # start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # try:
-    conn = boto3.client('ec2', region_name=r)
+    conn = boto3.client('cloudwatch', region_name=r)
     aws_metric = {
         "metric": "BytesUsedForCacheItems",
         "statistics": "Maximum"
