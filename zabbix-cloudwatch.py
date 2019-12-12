@@ -26,3 +26,10 @@ def getCloudWatchData(r,s,d):
         statistics = aws_metric['statistics']
         results = conn.get_metric_statistics(period, start_time, end_time, metric_name, statistics)
         print(results)
+
+    except:
+        print("YES")
+
+
+if __name__ == "__main__":
+    getCloudWatchData(cn-northwest-1, 'SQS', '')
