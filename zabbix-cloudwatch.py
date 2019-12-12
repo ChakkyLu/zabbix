@@ -17,9 +17,9 @@ def getCloudWatchData(r,s,d):
     # try:
     conn = boto3.client('cloudwatch', region_name=r)
     aws_metric = {
-        "metric": "BytesUsedForCacheItems",
-        "statistics": ['Maximum',]
-    }
+            "metric": "Reclaimed",
+            "statistics": ["Sum"]
+        }
     cloud_watch_data = ''
 
     metric_name = aws_metric['metric']
