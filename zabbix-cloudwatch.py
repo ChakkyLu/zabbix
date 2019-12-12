@@ -16,10 +16,11 @@ def getCloudWatchData(r,s,d):
 
     # try:
     conn = boto3.client('cloudwatch', region_name=r)
-    aws_metric ={
-            "metric": "BytesWrittenOutFromMemcached",
-            "statistics": ["Sum"]
-        }
+    aws_metric = {
+            "metric":"ApproximateNumberOfMessagesNotVisible",
+            "statistics": ["Average"]
+    }
+    
     cloud_watch_data = ''
 
     metric_name = aws_metric['metric']
