@@ -19,7 +19,7 @@ def getCloudWatchData(r,s,d):
     # try:
     conn = boto3.client('cloudwatch', region_name=r)
     aws_metric = {
-            "metric":"ApproximateNumberOfMessagesNotVisible",
+            "metric":"NumberOfMessagesSent",
             "statistics": ["Average"]
     }
 
@@ -27,7 +27,7 @@ def getCloudWatchData(r,s,d):
 
     metric_name = aws_metric['metric']
     statistics = aws_metric['statistics']
-    results = conn.get_metric_statistics(Namespace='AWS/',
+    results = conn.get_metric_statistics(Namespace='AWS/SQS',
                     MetricName=metric_name,
                     StartTime=start_time,
                     EndTime=end_time,
