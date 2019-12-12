@@ -9,7 +9,7 @@ def getCloudWatchData(r,s,d):
     global end_time
 
     end_time = datetime.datetime.now()
-    start_time = end_time - datetime.datetime.timedelta(minutes=5)
+    start_time = end_time - datetime.timedelta(minutes=5)
     period = 5*60
     end_time = end_time.strftime("%Y-%m-%d %H:%M:%S")
     start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
