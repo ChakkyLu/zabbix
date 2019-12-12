@@ -27,7 +27,7 @@ def getCloudWatchData(r,s,d):
 
     metric_name = aws_metric['metric']
     statistics = aws_metric['statistics']
-    results = conn.get_metric_statistics(Namespace='AWS/SQS',
+    results = conn.get_metric_statistics(Namespace='AWS/',
                     MetricName=metric_name,
                     StartTime=start_time,
                     EndTime=end_time,
