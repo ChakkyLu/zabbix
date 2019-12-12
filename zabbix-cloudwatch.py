@@ -14,21 +14,21 @@ def getCloudWatchData(r,s,d):
     end_time = end_time.strftime("%Y-%m-%d %H:%M:%S")
     start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
 
-    try:
-        conn = boto3.client('ec2', region_name=r)
-        aws_metric = {
-            "metric": "BytesUsedForCacheItems",
-            "statistics": "Maximum"
-        }
-        cloud_watch_data = ''
+    # try:
+    conn = boto3.client('ec2', region_name=r)
+    aws_metric = {
+        "metric": "BytesUsedForCacheItems",
+        "statistics": "Maximum"
+    }
+    cloud_watch_data = ''
 
-        metric_name = aws_metric['metric']
-        statistics = aws_metric['statistics']
-        results = conn.get_metric_statistics(period, start_time, end_time, metric_name, statistics)
-        print(results)
+    metric_name = aws_metric['metric']
+    statistics = aws_metric['statistics']
+    results = conn.get_metric_statistics(period, start_time, end_time, metric_name, statistics)
+    print(results)
 
-    except:
-        print("YES")
+    # except:
+    #     print("YES")
 
 
 if __name__ == "__main__":
