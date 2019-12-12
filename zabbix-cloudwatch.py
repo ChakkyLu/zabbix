@@ -29,7 +29,12 @@ def getCloudWatchData(r,s,d):
                     StartTime=start_time,
                     EndTime=end_time,
                     Period=period,
-                    Statistics=statistics)
+                    Statistics=statistics,
+                    Unit='Seconds'|'Microseconds'|'Milliseconds'|'Bytes'|'Kilobytes'|'Megabytes'|\
+                    'Gigabytes'|'Terabytes'|'Bits'|'Kilobits'|'Megabits'|'Gigabits'|'Terabits'|\
+                    'Percent'|'Count'|'Bytes/Second'|'Kilobytes/Second'|'Megabytes/Second'|'Gigabytes/Second'|\
+                    'Terabytes/Second'|'Bits/Second'|'Kilobits/Second'|'Megabits/Second'|'Gigabits/Second'|\
+                    'Terabits/Second'|'Count/Second'|'None')
     print(results)
 
     # except:
