@@ -11,8 +11,8 @@ def getCloudWatchData(r,s,d):
     end_time = datetime.datetime.now()
     start_time = end_time - datetime.timedelta(minutes=5)
     period = 5*60
-    end_time = end_time.strftime("%Y-%m-%d %H:%M:%S")
-    start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+    # end_time = end_time.strftime("%Y-%m-%d %H:%M:%S")
+    # start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # try:
     conn = boto3.client('ec2', region_name=r)
@@ -24,7 +24,12 @@ def getCloudWatchData(r,s,d):
 
     metric_name = aws_metric['metric']
     statistics = aws_metric['statistics']
-    results = conn.get_metric_statistics(period, start_time, end_time, metric_name, statistics)
+    results = conn.get_metric_statistics(Namespace='AWS/SQS',
+                    MetricName=metric_name,
+                    StartTime=start_time,
+                    EndTime=end_time,
+                    Period=period,
+                    Statistics=statistics)
     print(results)
 
     # except:
