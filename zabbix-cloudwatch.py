@@ -32,4 +32,4 @@ def getCloudWatchData(r,s,d):
 
 
 if __name__ == "__main__":
-    getCloudWatchData(cn-northwest-1, 'SQS', '')
+    getCloudWatchData('cn-northwest-1', 'SQS', '')
