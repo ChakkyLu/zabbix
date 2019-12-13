@@ -1,5 +1,10 @@
 import boto3
 import datetime
+import pytz
+
+
+utc_tz = pytz.timezone('UTC')
+
 
 def getCloudWatchData(r,s,d):
 
@@ -8,11 +13,11 @@ def getCloudWatchData(r,s,d):
     global start_time
     global end_time
 
-    # end_time = datetime.datetime.now()
-    # start_time = end_time - datetime.timedelta(minutes=5)
+    end_time = datetime.datetime.now(tz=utc_tz)
+    start_time = end_time - datetime.timedelta(minutes=5)
     # print(end_time)
-    end_time = datetime.datetime(2019,11,29,15,5,0)
-    start_time = datetime.datetime(2019,11,29,15,0,0)
+    # end_time = datetime.datetime(2019,11,29,15,5,0)
+    # start_time = datetime.datetime(2019,11,29,15,0,0)
     period = 5*60
     # end_time = end_time.strftime("%Y-%m-%d %H:%M:%S")
     # start_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
