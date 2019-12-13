@@ -19,7 +19,7 @@ def getCloudWatchData(r,s,d):
     # try:
     conn = boto3.client('cloudwatch', region_name=r)
     aws_metric = {
-            "metric":"CPUUtilization",
+            "metric":"MasterLinkHealthStatus",
             "statistics": ["Average"]
     }
 
@@ -27,7 +27,7 @@ def getCloudWatchData(r,s,d):
 
     metric_name = aws_metric['metric']
     statistics = aws_metric['statistics']
-    results = conn.get_metric_statistics(Namespace='AWS/EC',
+    results = conn.get_metric_statistics(Namespace='AWS/ElastiCache',
                     MetricName=metric_name,
                     StartTime=start_time,
                     EndTime=end_time,
@@ -40,4 +40,4 @@ def getCloudWatchData(r,s,d):
 
 
 if __name__ == "__main__":
-    getCloudWatchData('cn-northwest-1', 'SQS', '')
+    getCloudWatchData('cn-northwest-1', 'ElastiCache', '')
