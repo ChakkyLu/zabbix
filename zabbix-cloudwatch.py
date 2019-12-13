@@ -29,6 +29,7 @@ def getCloudWatchData(r,s,m,st,clid,caid):
 
         metric_name = aws_metric['metric']
         statistics = aws_metric['statistics']
+        print(metric_name,statistics)
         results = conn.get_metric_statistics(Namespace='AWS/ElastiCache',
                         MetricName=metric_name,
                         Dimensions=[
