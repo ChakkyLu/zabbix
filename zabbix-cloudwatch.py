@@ -10,6 +10,7 @@ def getCloudWatchData(r,s,d):
 
     end_time = datetime.datetime.now()
     start_time = end_time - datetime.timedelta(minutes=5)
+    print(end_time)
     # end_time = datetime.datetime(2019,11,29,15,5,0)
     # start_time = datetime.datetime(2019,11,29,15,0,0)
     period = 5*60
