@@ -57,4 +57,4 @@ if __name__ == "__main__":
     metric = args[1]
     clid = args[2]
     caid = '0001'
-    getCloudWatchData('cn-northwest-1', 'ElastiCache', metric, ['Average'], caid, clid)
+    getCloudWatchData('cn-northwest-1', 'ElastiCache', metric, ['Average'], clid, caid)
