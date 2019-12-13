@@ -19,7 +19,7 @@ def getCloudWatchData(r,s,d):
     # try:
     conn = boto3.client('cloudwatch', region_name=r)
     aws_metric = {
-            "metric":"MasterLinkHealthStatus",
+            "metric":"EngineCPUUtilization",
             "statistics": ["Average"]
     }
 
