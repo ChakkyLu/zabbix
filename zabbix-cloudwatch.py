@@ -31,7 +31,7 @@ def getCloudWatchData(r,s,d):
                     MetricName=metric_name,
                     Dimensions=[
                         {
-                            "Name": "CacheNodeId"
+                            "Name": "CacheNodeId",
                             "Value": "0001"
                         },
                     ],
