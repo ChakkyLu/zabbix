@@ -34,6 +34,10 @@ def getCloudWatchData(r,s,d):
                             "Name": "CacheNodeId",
                             "Value": "0001"
                         },
+                        {
+                            "Name": 'CacheClusterId',
+                            "Value": 'gitlab-redis-001'
+                        }
                     ],
                     StartTime=start_time,
                     EndTime=end_time,
