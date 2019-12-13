@@ -45,7 +45,7 @@ def getCloudWatchData(r,s,m,st,clid,caid):
                     EndTime=end_time,
                     Period=period,
                     Statistics=statistics)
-    datapoints = results['Datapoints']
+    datapoints = results['Datapoints'][-1]
     print(datapoints)
 
     # except:
