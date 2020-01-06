@@ -27,14 +27,17 @@ sql = '''select * from trends
             where itemid=34978'''
 result = pd.read_sql(sql, db)
 X = result['value_avg'].values
-dataX, datay =[], []
+dataX, datay = [], []
 size = len(X)
 time_step = 24
 ratio = 0.7
 lr = 0.0006
 for i in range(size-time_step-1):
-    x = X[i:i+time_step,#     y = X[i+time_step,#     dataX.append(x.tolist())
+    x = X[i:i+time_step]
+    y = X[i+time_step]
+    dataX.append(x.tolist())
     datay.append(y.tolist())
+    
 dataX = np.array(dataX).reshape(len(dataX), time_step, 1)
 datay = np.array(datay).reshape(len(datay),1)
 trainX = dataX[0:int(size*ratio),# trainy = datay[0:int(size*ratio),# testX = dataX[int(size*ratio):,# testy = datay[int(size*ratio):,#
