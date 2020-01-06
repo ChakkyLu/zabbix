@@ -37,10 +37,13 @@ for i in range(size-time_step-1):
     y = X[i+time_step]
     dataX.append(x.tolist())
     datay.append(y.tolist())
-    
+
 dataX = np.array(dataX).reshape(len(dataX), time_step, 1)
 datay = np.array(datay).reshape(len(datay),1)
-trainX = dataX[0:int(size*ratio),# trainy = datay[0:int(size*ratio),# testX = dataX[int(size*ratio):,# testy = datay[int(size*ratio):,#
+trainX = dataX[0:int(size*ratio)]
+trainy = datay[0:int(size*ratio)]
+testX = dataX[int(size*ratio):]
+testy = datay[int(size*ratio):,]
 model = Sequential()
 model.add(LSTM(200, batch_input_shape=(None, time_step, 1)))
 model.add(Dense(1))
