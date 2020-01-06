@@ -54,6 +54,8 @@ early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
 model.fit(trainX, trainy, batch_size=300, epochs=100, validation_split=0.1, callbacks=[early_stopping])
 predicted = model.predict(testX)
 
+print(predicted)
+print(testy)
 plt.figure()
 plt.plot(predicted, color='r', label='predicted_data')
 plt.plot(testy, color='b', label='real_data')
