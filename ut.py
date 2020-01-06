@@ -51,7 +51,7 @@ model.add(Activation("linear"))
 optimizer = Adam(lr=lr)
 model.compile(loss="mean_squared_error", optimizer=optimizer)
 early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-model.fit(trainX, trainy, batch_size=300, epochs=self.epoch, validation_split=0.1, callbacks=[early_stopping])
+model.fit(trainX, trainy, batch_size=300, epochs=100, validation_split=0.1, callbacks=[early_stopping])
 predicted = model.predict(testX)
 
 plt.figure()
