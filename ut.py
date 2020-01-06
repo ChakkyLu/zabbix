@@ -45,7 +45,7 @@ testX = dataX[int(size*ratio):]
 testy = datay[int(size*ratio):]
 
 model = Sequential()
-model.add(LSTM(self.n_hidden, batch_input_shape=(None, time_step, 1)))
+model.add(LSTM(200, batch_input_shape=(None, time_step, 1)))
 model.add(Dense(1))
 model.add(Activation("linear"))
 optimizer = Adam(lr=lr)
