@@ -52,7 +52,7 @@ for i in range(size-time_step-1):
 trainX = dataX[0:int(size*ratio)]
 trainy = datay[0:int(size*ratio)]
 testX = dataX[int(size*ratio):]
-testy = datay[int(size*ratio):,]
+testy = datay[int(size*ratio):]
 # model = Sequential()
 # model.add(LSTM(200, batch_input_shape=(None, time_step, 1)))
 # model.add(Dense(1))
