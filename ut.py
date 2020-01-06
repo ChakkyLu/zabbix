@@ -24,10 +24,11 @@ db = pymysql.connect(host=dbhost,
 
 sqlalchemyconn = create_engine('mysql+pymysql://%s:%s@%s:%s/%s' % (dbuser, dbpasswd, dbhost, dbport, dbdb),pool_size=20, max_overflow=0)
 sql = '''select * from trends
-            where itemid=30183'''
+            where itemid=34978'''
 result = pd.read_sql(sql, db)
 X = result['value_avg'].values
-dataX, datay =],,# size = len(X)
+dataX, datay =[], []
+size = len(X)
 time_step = 24
 ratio = 0.7
 lr = 0.0006
