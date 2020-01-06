@@ -17,5 +17,5 @@ db = pymysql.connect(host=dbhost,
 sqlalchemyconn = create_engine('mysql+pymysql://%s:%s@%s:%s/%s' % (dbuser, dbpasswd, dbhost, dbport, dbdb),pool_size=20, max_overflow=0)
 sql = '''select * from trends
             where itemid=34978'''
-pd.read_sql(sql, db)
-print(pd)
+result = pd.read_sql(sql, db)
+print(result)
