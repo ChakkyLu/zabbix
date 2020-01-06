@@ -8,7 +8,7 @@ from keras.engine.saving import model_from_json
 from keras.layers import LSTM, Dense, Activation
 from keras.optimizers import Adam
 import matplotlib.pyplot as plt
-import xgboost.sklearn import XGBRegressor
+from xgboost.sklearn import XGBRegressor
 import xgboost as xgb
 
 def modelXGB(trainX, trainy):
