@@ -23,7 +23,7 @@ def modelXGB(trainX, trainy):
 def modelLSTM(trainX, trainy, time_step):
     lr = 0.0006
     model = Sequential()
-    model.add(LSTM(200, batch_input_shape=(None, time_step, 1)))
+    model.add(LSTM(200, batch_input_shape=(None, time_step+1, 1)))
     model.add(Dense(1))
     model.add(Activation("linear"))
     optimizer = Adam(lr=lr)
@@ -64,8 +64,7 @@ if __name__ == "__main__":
 
     result = result.dropna().reset_index(drop=True)
     result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-    print(result)
-    exit()
+    result['Hour'] = result['Datetime'].dt.hour
     trainCol = list(result.columns.values)
     trainCol.remove("itemid")
     trainCol.remove("clock")
@@ -73,13 +72,14 @@ if __name__ == "__main__":
     trainCol.remove("value_max")
     trainCol.remove("value_avg")
     trainCol.remove("num")
+    trainCol.remove("Datetime")
 
     dataX = result[trainCol].values
     datay = result["value_avg"].values
 
 
     if modelType == 1:
-        dataX = dataX.reshape(size, time_step, 1)
+        dataX = dataX.reshape(size, time_step+1, 1)
         datay = np.array(datay).reshape(len(datay),1)
 
     # if modelType == 2:
