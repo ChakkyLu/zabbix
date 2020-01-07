@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from xgboost.sklearn import XGBRegressor
 import xgboost as xgb
 import sys
-
+import datetime
 
 def modelXGB(trainX, trainy):
     model = xgb.XGBRegressor(booster= 'gblinear', objective='reg:linear', min_child_weight=3, colsample_bytree=0.3, learning_rate=0.05,
@@ -63,6 +63,9 @@ if __name__ == "__main__":
         result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
 
     result = result.dropna().reset_index(drop=True)
+    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+    print(result)
+    exit()
     trainCol = list(result.columns.values)
     trainCol.remove("itemid")
     trainCol.remove("clock")
@@ -70,14 +73,10 @@ if __name__ == "__main__":
     trainCol.remove("value_max")
     trainCol.remove("value_avg")
     trainCol.remove("num")
-    print(trainCol)
 
     dataX = result[trainCol].values
     datay = result["value_avg"].values
 
-    size = len(result)
-
-    # print(dataX.shape)
 
     if modelType == 1:
         dataX = dataX.reshape(size, time_step, 1)
