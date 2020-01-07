@@ -69,6 +69,7 @@ if __name__ == "__main__":
     trainCol.remove("value_min")
     trainCol.remove("value_max")
     trainCol.remove("value_avg")
+    print(trainCol)
 
     dataX = result[trainCol].values
     datay = result["value_avg"].values
@@ -77,9 +78,9 @@ if __name__ == "__main__":
 
     # print(dataX.shape)
 
-    # if modelType == 1:
-    #     # dataX = np.array(dataX).reshape(len(dataX), time_step, 1)
-    #     datay = np.array(datay).reshape(len(datay),1)
+    if modelType == 1:
+        dataX = dataX.reshape(size, time_step, 1)
+        datay = np.array(datay).reshape(len(datay),1)
 
     # if modelType == 2:
     #     pass
