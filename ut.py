@@ -69,6 +69,7 @@ if __name__ == "__main__":
     trainCol.remove("value_min")
     trainCol.remove("value_max")
     trainCol.remove("value_avg")
+    trainCol.remove("num")
     print(trainCol)
 
     dataX = result[trainCol].values
