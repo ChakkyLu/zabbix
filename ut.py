@@ -55,6 +55,7 @@ if __name__ == "__main__":
 # 43740
 # 34978
     result = pd.read_sql(sql, db)
+    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
 
     result.to_csv('/tmp/result.csv')
 
@@ -67,7 +68,6 @@ if __name__ == "__main__":
         result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
 
     result = result.dropna().reset_index(drop=True)
-    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
     result['Hour'] = result['Datetime'].dt.hour
     trainCol = list(result.columns.values)
     trainCol.remove("itemid")
