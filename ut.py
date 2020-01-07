@@ -73,14 +73,14 @@ if __name__ == "__main__":
     dataX = result[trainCol].values
     datay = result["value_avg"].values
 
-    print(dataX.shape)
+    # print(dataX.shape)
 
-    if modelType == 1:
-        dataX = np.array(dataX).reshape(len(dataX), time_step, 1)
-        datay = np.array(datay).reshape(len(datay),1)
+    # if modelType == 1:
+    #     # dataX = np.array(dataX).reshape(len(dataX), time_step, 1)
+    #     datay = np.array(datay).reshape(len(datay),1)
 
-    if modelType == 2:
-        pass
+    # if modelType == 2:
+    #     pass
 
     trainX = dataX[0:int(size*ratio)]
     trainy = datay[0:int(size*ratio)]
