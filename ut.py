@@ -57,7 +57,7 @@ if __name__ == "__main__":
     result = pd.read_sql(sql, db)
 
     result.to_csv('/tmp/result.csv')
-    
+
     time_step = 24
     time_ser = 12
     ratio = 0.7
