@@ -73,6 +73,8 @@ if __name__ == "__main__":
     dataX = result[trainCol].values
     datay = result["value_avg"].values
 
+    size = len(result)
+
     # print(dataX.shape)
 
     # if modelType == 1:
