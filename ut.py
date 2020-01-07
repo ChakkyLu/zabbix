@@ -73,7 +73,7 @@ if __name__ == "__main__":
     dataX = result[trainCol].values
     datay = result["value_avg"].values
 
-    print(dataX)
+    print(dataX.shape)
 
     if modelType == 1:
         dataX = np.array(dataX).reshape(len(dataX), time_step, 1)
