@@ -36,6 +36,7 @@ def modelLSTM(trainX, trainy, time_step):
 
 if __name__ == "__main__":
     modelType = int(sys.argv[1])
+    itemid = sys.argv[2]
 
     dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
     dbport = 3306
@@ -50,9 +51,9 @@ if __name__ == "__main__":
                        db=dbdb)
 
     sql = '''select * from trends
-            where itemid=34978'''
-
-
+            where itemid=%s''' % itemid
+# 43740
+# 34978
     result = pd.read_sql(sql, db)
     time_step = 24
     time_ser = 12
