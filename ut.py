@@ -94,6 +94,8 @@ class forecastModel():
         testX = dataX[int(size*self.ratio):]
         testy = datay[int(size*self.ratio):]
 
+        print("TrainData Size: %d" % size)
+        
         if self.modelType == 1:
             model = self.modelLSTM(trainX, trainy, time_step)
         if self.modelType == 2:
@@ -113,6 +115,7 @@ class forecastModel():
         dataX = list(result[["value_avg",'Hour']].values)
         forecastValue = self.model.predict(dataX)
         print(forecastValue)
+        db.close()
 
 def getHostList(key):
     fm = forecastModel()
