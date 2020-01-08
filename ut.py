@@ -12,6 +12,7 @@ from xgboost.sklearn import XGBRegressor
 import xgboost as xgb
 import sys
 import datetime
+import os
 
 
 class forecastModel():
