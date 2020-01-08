@@ -55,7 +55,7 @@ class forecastModel():
     def trainModel(self):
         pass
 
-def getHostList(self, key):
+def getHostList(key):
     fm = forecastModel()
     db = fm.initDB()
     sql = '''
