@@ -126,8 +126,8 @@ def getHostList(key):
     for itemid, host in zip(itemsid, hosts):
         fm.itemid = itemid
         fm.host = host
-        self.trainModel()
-        self.predict()
+        fm.trainModel()
+        fm.predict()
 
 
 def main(key):
