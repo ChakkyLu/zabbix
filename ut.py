@@ -29,7 +29,6 @@ class forecastModel():
         self.time_ser = time_ser
         self.modelType = modelType
 
-
     def initDB(self):
         db = pymysql.connect(host=self.config['dbhost'],
                            port=self.config['dbport'],
@@ -120,7 +119,9 @@ class forecastModel():
                 print(dataX)
                 forecastValue = self.model.predict(dataX)
                 print(forecastValue)
+                return forecastValue
             db.close()
+        return None
 
 def getHostList(key):
     fm = forecastModel()
@@ -139,7 +140,9 @@ def getHostList(key):
         fm.host = host
         try:
             fm.trainModel()
-            fm.predict()
+            forecastValue = fm.predict()
+            if forecastValue:
+                os.system('zabbix_sender -z 172.32.5.147 -s %s -k forecast.cpu_ut -o %s' % (host, str(forecastValue)))
         except:
             pass
 
