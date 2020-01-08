@@ -144,7 +144,7 @@ def getHostList(key):
         forecastValue = fm.predict()
         if forecastValue:
             print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-            os.system('zabbix_sender -z 172.32.5.147 -s %s -k forecast.cpu_ut -o %s' % (host, str(forecastValue)))
+            os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
         # except:
         #     pass
 
