@@ -115,6 +115,7 @@ class forecastModel():
             result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
             result['Hour'] = result['Datetime'].dt.hour
             dataX = list(result["value_avg"].values)
+            dataX.append(result[-1]['Hour']+self.time_ser)
             print(dataX)
             forecastValue = self.model.predict(dataX)
             print(forecastValue)
