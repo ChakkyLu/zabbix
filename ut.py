@@ -107,19 +107,20 @@ class forecastModel():
         db.close()
 
     def predict(self):
-        db = self.initDB()
-        sql = '''select * from trends
-                where itemid=%s order by clock desc limit %d''' % (self.itemid, self.time_step)
-        result = pd.read_sql(sql, db)
-        if len(result)>0:
-            result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-            result['Hour'] = result['Datetime'].dt.hour
-            dataX = list(result["value_avg"].values)[::-1]
-            dataX.append(result.iloc[-1]['Hour']+self.time_ser)
-            print(dataX)
-            forecastValue = self.model.predict(dataX)
-            print(forecastValue)
-        db.close()
+        if self.model:
+            db = self.initDB()
+            sql = '''select * from trends
+                    where itemid=%s order by clock desc limit %d''' % (self.itemid, self.time_step)
+            result = pd.read_sql(sql, db)
+            if len(result)>0:
+                result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+                result['Hour'] = result['Datetime'].dt.hour
+                dataX = list(result["value_avg"].values)[::-1]
+                dataX.append(result.iloc[-1]['Hour']+self.time_ser)
+                print(dataX)
+                forecastValue = self.model.predict(dataX)
+                print(forecastValue)
+            db.close()
 
 def getHostList(key):
     fm = forecastModel()
@@ -133,13 +134,14 @@ def getHostList(key):
     hosts = list(result['host'].values)
 
     for itemid, host in zip(itemsid, hosts):
+        fm.model = None
         fm.itemid = itemid
         fm.host = host
-        # try:
-        fm.trainModel()
-        fm.predict()
-        # except:
-        #     pass
+        try:
+            fm.trainModel()
+            fm.predict()
+        except:
+            pass
 
 
 def main(key):
