@@ -16,7 +16,7 @@ import datetime
 
 class forecastModel():
 
-    def __init__(self, time_step=24, time_ser=12, ratio=0.7):
+    def __init__(self, time_step=24, time_ser=12, ratio=0.7, modelType=2):
         self.config = {
             'dbhost': "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn",
             'dbport': 3306,
@@ -27,6 +27,8 @@ class forecastModel():
         self.ratio = 0.7
         self.time_step = time_step
         self.time_ser = time_ser
+        self.modelType = modelType
+
 
     def initDB(self):
         db = pymysql.connect(host=self.config['dbhost'],
@@ -87,14 +89,14 @@ class forecastModel():
             dataX = dataX.reshape(size, time_step+1, 1)
             datay = np.array(datay).reshape(len(datay),1)
 
-        trainX = dataX[0:int(size*ratio)]
-        trainy = datay[0:int(size*ratio)]
-        testX = dataX[int(size*ratio):]
-        testy = datay[int(size*ratio):]
+        trainX = dataX[0:int(size*self.ratio)]
+        trainy = datay[0:int(size*self.ratio)]
+        testX = dataX[int(size*self.ratio):]
+        testy = datay[int(size*self.ratio):]
 
-        if modelType == 1:
+        if self.modelType == 1:
             model = self.modelLSTM(trainX, trainy, time_step)
-        if modelType == 2:
+        if self.modelType == 2:
             model = self.modelXGB(trainX, trainy)
 
         db.close()
