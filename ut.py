@@ -95,15 +95,16 @@ class forecastModel():
         testy = datay[int(size*self.ratio):]
 
         print("TrainData Size: %d" % size)
-        
-        if self.modelType == 1:
-            model = self.modelLSTM(trainX, trainy, time_step)
-        if self.modelType == 2:
-            model = self.modelXGB(trainX, trainy)
+
+        if size:
+            if self.modelType == 1:
+                model = self.modelLSTM(trainX, trainy, time_step)
+            if self.modelType == 2:
+                model = self.modelXGB(trainX, trainy)
+
+            self.model = model
 
         db.close()
-
-        self.model = model
 
     def predict(self):
         db = self.initDB()
@@ -131,11 +132,11 @@ def getHostList(key):
     for itemid, host in zip(itemsid, hosts):
         fm.itemid = itemid
         fm.host = host
-        try:
-            fm.trainModel()
-            fm.predict()
-        except:
-            pass
+        # try:
+        fm.trainModel()
+        fm.predict()
+        # except:
+        #     pass
 
 
 def main(key):
