@@ -128,8 +128,11 @@ def getHostList(key):
     for itemid, host in zip(itemsid, hosts):
         fm.itemid = itemid
         fm.host = host
-        fm.trainModel()
-        fm.predict()
+        try:
+            fm.trainModel()
+            fm.predict()
+        except:
+            pass
 
 
 def main(key):
