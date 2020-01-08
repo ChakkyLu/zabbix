@@ -111,11 +111,12 @@ class forecastModel():
         sql = '''select * from trends
                 where itemid=%s order by clock desc limit %d''' % (self.itemid, self.time_step)
         result = pd.read_sql(sql, db)
-        result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-        result['Hour'] = result['Datetime'].dt.hour
-        dataX = list(result[["value_avg",'Hour']].values)
-        forecastValue = self.model.predict(dataX)
-        print(forecastValue)
+        if len(result)>0:
+            result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+            result['Hour'] = result['Datetime'].dt.hour
+            dataX = list(result[["value_avg",'Hour']].values)
+            forecastValue = self.model.predict(dataX)
+            print(forecastValue)
         db.close()
 
 def getHostList(key):
