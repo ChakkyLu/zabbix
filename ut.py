@@ -16,7 +16,7 @@ import datetime
 
 class forecastModel():
 
-    def __init__(self):
+    def __init__(self, time_step=24, time_ser=12, ratio=0.7):
         self.config = {
             'dbhost': "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn",
             'dbport': 3306,
@@ -24,6 +24,9 @@ class forecastModel():
             'dbpasswd': "W2df6s9&GA^iVKCI",
             'dbdb': "zabbix"
         }
+        self.ratio = 0.7
+        self.time_step = time_step
+        self.time_ser = time_ser
 
     def initDB(self):
         db = pymysql.connect(host=self.config['dbhost'],
@@ -53,7 +56,61 @@ class forecastModel():
         return model
 
     def trainModel(self):
-        pass
+        db = self.initDB()
+        sql = '''select * from trends
+                where itemid=%s''' % self.itemid
+        result = pd.read_sql(sql, db)
+
+        result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+
+        for h_shift in range(self.time_ser, self.time_ser + self.time_step):
+            result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
+
+
+        result = result.dropna().reset_index(drop=True)
+        result['Hour'] = result['Datetime'].dt.hour
+        trainCol = list(result.columns.values)
+        trainCol.remove("itemid")
+        trainCol.remove("clock")
+        trainCol.remove("value_min")
+        trainCol.remove("value_max")
+        trainCol.remove("value_avg")
+        trainCol.remove("num")
+        trainCol.remove("Datetime")
+
+        dataX = result[trainCol].values
+        datay = result["value_avg"].values
+        size = len(result)
+
+
+        if modelType == 1:
+            dataX = dataX.reshape(size, time_step+1, 1)
+            datay = np.array(datay).reshape(len(datay),1)
+
+        trainX = dataX[0:int(size*ratio)]
+        trainy = datay[0:int(size*ratio)]
+        testX = dataX[int(size*ratio):]
+        testy = datay[int(size*ratio):]
+
+        if modelType == 1:
+            model = self.modelLSTM(trainX, trainy, time_step)
+        if modelType == 2:
+            model = self.modelXGB(trainX, trainy)
+
+        db.close()
+
+        self.model = model
+
+    def predict(self):
+        db = self.initDB()
+        sql = '''select * from trends
+                where itemid=%s order by clock desc limit %d''' % (self.itemid, self.time_step)
+        result = pd.read_sql(sql, db)
+        result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+        result['Hour'] = result['Datetime'].dt.hour
+        dataX = list(result[["value_avg",'Hour']].values)
+        forecastValue = self.model.predict(dataX)
+        print(forecastValue)
 
 def getHostList(key):
     fm = forecastModel()
@@ -63,10 +120,14 @@ def getHostList(key):
         hosts t2 where t1.name like '%%%s%%' and t1.hostid = t2.hostid
         ''' % (key)
     result = pd.read_sql(sql, db)
-    print(result)
-    # for row in result:
-    #     print(row)
+    itemsid = list(result['itemid'].values)
+    hosts = list(result['host'].values)
 
+    for itemid, host in zip(itemsid, hosts):
+        fm.itemid = itemid
+        fm.host = host
+        self.trainModel()
+        self.predict()
 
 
 def main(key):
