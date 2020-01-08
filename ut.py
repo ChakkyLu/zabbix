@@ -60,7 +60,7 @@ def getHostList(key):
     db = fm.initDB()
     sql = '''
         select t1.itemid, t1.name, t1.hostid, t2.host from items t1,
-        hosts t2 where t1.name like "\%%s\%" and t1.hostid = t2.hostid;
+        hosts t2 where t1.name like "%%s%" and t1.hostid = t2.hostid;
     ''' % (key)
     result = pd.read_sql(sql, db)
     for row in result:
