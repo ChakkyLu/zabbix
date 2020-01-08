@@ -85,7 +85,7 @@ class forecastModel():
         size = len(result)
 
 
-        if modelType == 1:
+        if self.modelType == 1:
             dataX = dataX.reshape(size, time_step+1, 1)
             datay = np.array(datay).reshape(len(datay),1)
 
