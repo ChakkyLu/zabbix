@@ -73,10 +73,11 @@ def main(key):
 
 
 
-
 if __name__ == "__main__":
-    modelType = int(sys.argv[1])
-    itemid = sys.argv[2]
+    key = 'CPU utilization'
+    # modelType = int(sys.argv[1])
+    # itemid = sys.argv[2]
+    main(key)
 
 #
 #     dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
