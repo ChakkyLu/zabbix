@@ -63,8 +63,9 @@ def getHostList(key):
         hosts t2 where t1.name like '%%%s%%' and t1.hostid = t2.hostid
         ''' % (key)
     result = pd.read_sql(sql, db)
-    for row in result:
-        print(row)
+    print(result)
+    # for row in result:
+    #     print(row)
 
 
 
