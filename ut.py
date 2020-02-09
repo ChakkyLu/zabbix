@@ -173,6 +173,7 @@ if __name__ == "__main__":
                        passwd=dbpasswd,
                        db=dbdb)
 
+    itemid = 43740
     sql = '''select * from trends
             where itemid=%s''' % itemid
 # 43740
