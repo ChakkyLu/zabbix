@@ -142,9 +142,10 @@ def getHostList(key):
         # try:
         fm.trainModel()
         forecastValue = fm.predict()
-        if forecastValue:
-            print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-            os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
+        break
+        # if forecastValue:
+        #     print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+        #     os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
         # except:
         #     pass
 
@@ -155,87 +156,87 @@ def main(key):
 
 
 if __name__ == "__main__":
-    # key = 'CPU utilization'
-    # modelType = int(sys.argv[1])
-    # itemid = sys.argv[2]
-    # main(key)
+    key = 'CPU utilization'
+    modelType = int(sys.argv[1])
+    itemid = sys.argv[2]
+    main(key)
 
 #
-    dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
-    dbport = 3306
-    dbuser = "jnczabbix"
-    dbpasswd = "W2df6s9&GA^iVKCI"
-    dbdb = "zabbix"
-
-    db = pymysql.connect(host=dbhost,
-                       port=dbport,
-                       user=dbuser,
-                       passwd=dbpasswd,
-                       db=dbdb)
-
-    itemid = 43740
-    sql = '''select * from trends
-            where itemid=%s''' % itemid
-# 43740
-# 34978
-    result = pd.read_sql(sql, db)
-    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-
-    result.to_csv('/tmp/result.csv')
-
-    time_step = 24
-    time_ser = 12
-    ratio = 0.7
-
-
-    for h_shift in range(time_ser, time_ser + time_step):
-        result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
-
-    result = result.dropna().reset_index(drop=True)
-    result['Hour'] = result['Datetime'].dt.hour
-    trainCol = list(result.columns.values)
-    trainCol.remove("itemid")
-    trainCol.remove("clock")
-    trainCol.remove("value_min")
-    trainCol.remove("value_max")
-    trainCol.remove("value_avg")
-    trainCol.remove("num")
-    trainCol.remove("Datetime")
-
-    dataX = result[trainCol].values
-    datay = result["value_avg"].values
-    size = len(result)
-
-    modelType = 1
-    
-    if modelType == 1:
-        dataX = dataX.reshape(size, time_step+1, 1)
-        datay = np.array(datay).reshape(len(datay),1)
-
-    # if modelType == 2:
-    #     pass
-
-    trainX = dataX[0:int(size*ratio)]
-    trainy = datay[0:int(size*ratio)]
-    testX = dataX[int(size*ratio):]
-    testy = datay[int(size*ratio):]
-
-    if modelType == 1:
-        model = modelLSTM(trainX, trainy, time_step)
-    if modelType == 2:
-        model = modelXGB(trainX, trainy)
-
-    predicted = model.predict(testX)
-
-    # for i in range(size-time_step-1):
-    #     x = X[i:i+time_step]
-    #     y = X[i+time_step+time_ser]
-    #     dataX.append(x.tolist())
-    #     datay.append(y.tolist())
-
-    plt.figure()
-    plt.plot(predicted, color='r', label='predicted_data')
-    plt.plot(testy, color='b', label='real_data')
-    plt.legend()
-    plt.show()
-    plt.savefig("kk.png")
+#     dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
+#     dbport = 3306
+#     dbuser = "jnczabbix"
+#     dbpasswd = "W2df6s9&GA^iVKCI"
+#     dbdb = "zabbix"
+#
+#     db = pymysql.connect(host=dbhost,
+#                        port=dbport,
+#                        user=dbuser,
+#                        passwd=dbpasswd,
+#                        db=dbdb)
+#
+#     itemid = 43740
+#     sql = '''select * from trends
+#             where itemid=%s''' % itemid
+# # 43740
+# # 34978
+#     result = pd.read_sql(sql, db)
+#     result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+#
+#     result.to_csv('/tmp/result.csv')
+#
+#     time_step = 24
+#     time_ser = 12
+#     ratio = 0.7
+#
+#
+#     for h_shift in range(time_ser, time_ser + time_step):
+#         result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
+#
+#     result = result.dropna().reset_index(drop=True)
+#     result['Hour'] = result['Datetime'].dt.hour
+#     trainCol = list(result.columns.values)
+#     trainCol.remove("itemid")
+#     trainCol.remove("clock")
+#     trainCol.remove("value_min")
+#     trainCol.remove("value_max")
+#     trainCol.remove("value_avg")
+#     trainCol.remove("num")
+#     trainCol.remove("Datetime")
+#
+#     dataX = result[trainCol].values
+#     datay = result["value_avg"].values
+#     size = len(result)
+#
+#     modelType = 1
+#
+#     if modelType == 1:
+#         dataX = dataX.reshape(size, time_step+1, 1)
+#         datay = np.array(datay).reshape(len(datay),1)
+#
+#     # if modelType == 2:
+#     #     pass
+#
+#     trainX = dataX[0:int(size*ratio)]
+#     trainy = datay[0:int(size*ratio)]
+#     testX = dataX[int(size*ratio):]
+#     testy = datay[int(size*ratio):]
+#
+#     if modelType == 1:
+#         model = modelLSTM(trainX, trainy, time_step)
+#     if modelType == 2:
+#         model = modelXGB(trainX, trainy)
+#
+#     predicted = model.predict(testX)
+#
+#     # for i in range(size-time_step-1):
+#     #     x = X[i:i+time_step]
+#     #     y = X[i+time_step+time_ser]
+#     #     dataX.append(x.tolist())
+#     #     datay.append(y.tolist())
+#
+#     plt.figure()
+#     plt.plot(predicted, color='r', label='predicted_data')
+#     plt.plot(testy, color='b', label='real_data')
+#     plt.legend()
+#     plt.show()
+#     plt.savefig("kk.png")
