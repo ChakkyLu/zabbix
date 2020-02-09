@@ -206,7 +206,8 @@ if __name__ == "__main__":
     datay = result["value_avg"].values
     size = len(result)
 
-
+    modelType = 1
+    
     if modelType == 1:
         dataX = dataX.reshape(size, time_step+1, 1)
         datay = np.array(datay).reshape(len(datay),1)
