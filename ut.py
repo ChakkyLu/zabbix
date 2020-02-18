@@ -198,7 +198,7 @@ def singleModel():
     result.to_csv('/tmp/result.csv')
 
     time_step = 24
-    time_ser = 12
+    time_ser = 1
     ratio = 0.7
 
     for h_shift in range(time_ser, time_ser + time_step):
