@@ -135,7 +135,7 @@ def modelXGB(trainX, trainy):
 def modelLSTM(trainX, trainy, time_step):
     lr = 0.002
     model = Sequential()
-    model.add(LSTM(100, batch_input_shape=(None, time_step+1, 1)))
+    model.add(LSTM(200, batch_input_shape=(None, time_step+1, 1)))
     model.add(Dense(1))
     model.add(Activation("linear"))
     optimizer = Adam(lr=lr)
@@ -238,7 +238,7 @@ def singleModel():
     if modelType == 2:
         model = modelXGB(trainX, trainy)
 
-    predicted = model.predict(testX)
+    predicted = model.predict(trainX)
 
     print(predicted)
     # for i in range(size-time_step-1):
@@ -249,11 +249,11 @@ def singleModel():
 
     plt.figure()
     plt.plot(predicted, color='r', label='predicted_data')
-    plt.plot(testy, color='b', label='real_data')
+    plt.plot(trainy, color='b', label='real_data')
     plt.legend()
     plt.show()
-    plt.savefig("result2.png")
-    # plt.savefig("result.png")
+    # plt.savefig("result2.png")
+    plt.savefig("result.png")
 
 
 
