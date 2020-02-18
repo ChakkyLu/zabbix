@@ -240,6 +240,7 @@ def singleModel():
 
     predicted = model.predict(testX)
 
+    print(predicted)
     # for i in range(size-time_step-1):
     #     x = X[i:i+time_step]
     #     y = X[i+time_step+time_ser]
