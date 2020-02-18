@@ -158,7 +158,7 @@ def main(key):
 if __name__ == "__main__":
     key = 'CPU utilization'
     modelType = int(sys.argv[1])
-    key = int(sys.argv[2])
+    key = sys.argv[2] + " " + sys.argv[3]
     # itemid = sys.argv[2]
     main(key)
 
