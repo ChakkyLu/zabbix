@@ -124,6 +124,26 @@ class forecastModel():
             db.close()
         return None
 
+
+def modelXGB(trainX, trainy):
+    model = xgb.XGBRegressor(booster= 'gblinear', objective='reg:linear', min_child_weight=3, colsample_bytree=0.3, learning_rate=0.05,
+                                 max_depth=5, alpha=5, n_estimators=1000, subsample=0.8, cv=3)
+
+    model.fit(trainX, trainy)
+    return model
+
+def modelLSTM(trainX, trainy, time_step):
+    lr = 0.0006
+    model = Sequential()
+    model.add(LSTM(200, batch_input_shape=(None, time_step+1, 1)))
+    model.add(Dense(1))
+    model.add(Activation("linear"))
+    optimizer = Adam(lr=lr)
+    model.compile(loss="mean_squared_error", optimizer=optimizer)
+    early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
+    model.fit(trainX, trainy, batch_size=16, epochs=20, validation_split=0.1, callbacks=[early_stopping])
+    return model
+
 def getHostList(key):
     fm = forecastModel()
     db = fm.initDB()
