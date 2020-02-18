@@ -219,7 +219,7 @@ def singleModel():
     datay = result["value_avg"].values
     size = len(result)
 
-    modelType = 1
+    modelType = 2
 
     if modelType == 1:
         dataX = dataX.reshape(size, time_step+1, 1)
