@@ -205,7 +205,7 @@ def singleModel():
         result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
 
     result = result.dropna().reset_index(drop=True)
-    result['Hour'] = result['Datetime'].dt.hour
+    # result['Hour'] = result['Datetime'].dt.hour
     trainCol = list(result.columns.values)
     trainCol.remove("itemid")
     trainCol.remove("clock")
