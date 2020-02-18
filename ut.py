@@ -127,7 +127,7 @@ class forecastModel():
 
 def modelXGB(trainX, trainy):
     model = xgb.XGBRegressor(booster= 'gblinear', objective='reg:linear', min_child_weight=3, colsample_bytree=0.3, learning_rate=0.05,
-                                 max_depth=5, alpha=5, n_estimators=1000, subsample=0.8, cv=3)
+                                 max_depth=2, alpha=5, n_estimators=100, subsample=0.8, cv=3)
 
     model.fit(trainX, trainy)
     return model
