@@ -135,7 +135,7 @@ def getHostList(key):
     itemsid = list(result['itemid'].values)
     hosts = list(result['host'].values)
 
-    for itemid, host in zip(itemsid, hosts):
+    for itemid, host in zip(itemsid,  hosts):
         fm.model = None
         fm.itemid = itemid
         fm.host = host
@@ -158,6 +158,7 @@ def main(key):
 if __name__ == "__main__":
     key = 'CPU utilization'
     modelType = int(sys.argv[1])
+    key = int(sys.argv[2])
     # itemid = sys.argv[2]
     main(key)
 
