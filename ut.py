@@ -133,9 +133,9 @@ def modelXGB(trainX, trainy):
     return model
 
 def modelLSTM(trainX, trainy, time_step):
-    lr = 0.0006
+    lr = 0.002
     model = Sequential()
-    model.add(LSTM(200, batch_input_shape=(None, time_step+1, 1)))
+    model.add(LSTM(100, batch_input_shape=(None, time_step+1, 1)))
     model.add(Dense(1))
     model.add(Activation("linear"))
     optimizer = Adam(lr=lr)
@@ -219,7 +219,7 @@ def singleModel():
     datay = result["value_avg"].values
     size = len(result)
 
-    modelType = 2
+    modelType = 1
 
     if modelType == 1:
         dataX = dataX.reshape(size, time_step+1, 1)
