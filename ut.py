@@ -251,7 +251,8 @@ def singleModel():
     plt.plot(testy, color='b', label='real_data')
     plt.legend()
     plt.show()
-    plt.savefig("result.png")
+    plt.savefig("result2.png")
+    # plt.savefig("result.png")
 
 
 
