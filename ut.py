@@ -5,7 +5,7 @@ import numpy as np
 from keras import Sequential
 from keras.callbacks import EarlyStopping
 from keras.engine.saving import model_from_json
-from keras.layers import LSTM, Dense, Activation
+from keras.layers import LSTM, Dense, Activation, Dropout
 from keras.optimizers import Adam
 import matplotlib.pyplot as plt
 from xgboost.sklearn import XGBRegressor
@@ -13,6 +13,12 @@ import xgboost as xgb
 import sys
 import datetime
 import os
+from keras import layers
+# import glob, os
+import seaborn as sns
+import sys
+from sklearn.preprocessing import MinMaxScaler
+
 
 
 class forecastModel():
@@ -127,21 +133,23 @@ class forecastModel():
 
 def modelXGB(trainX, trainy):
     model = xgb.XGBRegressor(booster= 'gblinear', objective='reg:linear', min_child_weight=3, colsample_bytree=0.3, learning_rate=0.05,
-                                 max_depth=2, alpha=5, n_estimators=100, subsample=0.8, cv=3)
+                                 max_depth=2, alpha=5, n_estimators=1000, subsample=0.8, cv=3)
 
     model.fit(trainX, trainy)
     return model
 
 def modelLSTM(trainX, trainy, time_step):
-    lr = 0.002
+    lr = 0.0005
     model = Sequential()
-    model.add(LSTM(200, batch_input_shape=(None, time_step+1, 1)))
+
+    model.add(LSTM(200, batch_input_shape=(None, time_step, 1)))
     model.add(Dense(1))
     model.add(Activation("linear"))
     optimizer = Adam(lr=lr)
     model.compile(loss="mean_squared_error", optimizer=optimizer)
     early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-    model.fit(trainX, trainy, batch_size=16, epochs=20, validation_split=0.1, callbacks=[early_stopping])
+    lstm2 = model.fit(trainX, trainy, batch_size=16, epochs=10, validation_split=0.1, callbacks=[early_stopping])
+
     return model
 
 def getHostList(key):
@@ -159,15 +167,14 @@ def getHostList(key):
         fm.model = None
         fm.itemid = itemid
         fm.host = host
-        # try:
-        fm.trainModel()
-        forecastValue = fm.predict()
-        # break
-        # if forecastValue:
-        #     print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-        #     os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
-        # except:
-        #     pass
+        try:
+            fm.trainModel()
+            forecastValue = fm.predict()
+            if forecastValue:
+                print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
+        except:
+            pass
 
 
 def main(key):
@@ -176,29 +183,33 @@ def main(key):
 
 def singleModel():
 
-    dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
-    dbport = 3306
-    dbuser = "jnczabbix"
-    dbpasswd = "W2df6s9&GA^iVKCI"
-    dbdb = "zabbix"
+    # dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
+    # dbport = 3306
+    # dbuser = "jnczabbix"
+    # dbpasswd = "W2df6s9&GA^iVKCI"
+    # dbdb = "zabbix"
+    #
+    # db = pymysql.connect(host=dbhost,
+    #                    port=dbport,
+    #                    user=dbuser,
+    #                    passwd=dbpasswd,
+    #                    db=dbdb)
+    #
+    # itemid = 45233
+    # sql = '''select * from trends
+    #         where itemid=%s''' % itemid
+    #
+    # result = pd.read_sql(sql, db)
+    # result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
 
-    db = pymysql.connect(host=dbhost,
-                       port=dbport,
-                       user=dbuser,
-                       passwd=dbpasswd,
-                       db=dbdb)
+    # result.to_csv('/tmp/result.csv')
 
-    itemid = 45233
-    sql = '''select * from trends
-            where itemid=%s''' % itemid
+    result = pd.read_csv("result.csv")
+    result = result[['Datetime', 'itemid', 'clock', 'value_min', 'value_max', 'value_avg', 'num']]
+    result['Datetime'] = pd.to_datetime(result['Datetime'])
 
-    result = pd.read_sql(sql, db)
-    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-
-    result.to_csv('/tmp/result.csv')
-
-    time_step = 24
-    time_ser = 1
+    time_step = 48
+    time_ser = 12
     ratio = 0.7
 
     for h_shift in range(time_ser, time_ser + time_step):
@@ -222,7 +233,7 @@ def singleModel():
     modelType = 1
 
     if modelType == 1:
-        dataX = dataX.reshape(size, time_step+1, 1)
+        dataX = dataX.reshape(size, time_step, 1)
         datay = np.array(datay).reshape(len(datay),1)
 
     # if modelType == 2:
@@ -263,8 +274,8 @@ if __name__ == "__main__":
     modelType = int(sys.argv[1])
     key = sys.argv[2] + " " + sys.argv[3]
     # itemid = sys.argv[2]
-    # main(key)
-    singleModel()
+    main(key)
+    # singleModel()
 
 #
 #     dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
