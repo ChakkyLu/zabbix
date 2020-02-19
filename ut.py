@@ -14,8 +14,6 @@ import sys
 import datetime
 import os
 from keras import layers
-# import glob, os
-import seaborn as sns
 import sys
 from sklearn.preprocessing import MinMaxScaler
 
