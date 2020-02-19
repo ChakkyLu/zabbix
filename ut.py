@@ -273,8 +273,8 @@ if __name__ == "__main__":
     modelType = int(sys.argv[1])
     key = sys.argv[2] + " " + sys.argv[3]
     # itemid = sys.argv[2]
-    # main(key, modelType)
-    singleModel()
+    main(key, modelType)
+    # singleModel()
 
 #
 #     dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
