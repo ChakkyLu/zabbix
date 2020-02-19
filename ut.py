@@ -72,6 +72,7 @@ class forecastModel():
         for h_shift in range(self.time_ser, self.time_ser + self.time_step):
             result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
 
+        print("DEBUG")
 
         result = result.dropna().reset_index(drop=True)
         result['Hour'] = result['Datetime'].dt.hour
