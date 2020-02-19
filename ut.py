@@ -181,30 +181,30 @@ def main(key, modelType):
 
 def singleModel():
 
-    # dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
-    # dbport = 3306
-    # dbuser = "jnczabbix"
-    # dbpasswd = "W2df6s9&GA^iVKCI"
-    # dbdb = "zabbix"
-    #
-    # db = pymysql.connect(host=dbhost,
-    #                    port=dbport,
-    #                    user=dbuser,
-    #                    passwd=dbpasswd,
-    #                    db=dbdb)
-    #
-    # itemid = 45233
-    # sql = '''select * from trends
-    #         where itemid=%s''' % itemid
-    #
-    # result = pd.read_sql(sql, db)
-    # result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+    dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
+    dbport = 3306
+    dbuser = "jnczabbix"
+    dbpasswd = "W2df6s9&GA^iVKCI"
+    dbdb = "zabbix"
 
-    # result.to_csv('/tmp/result.csv')
+    db = pymysql.connect(host=dbhost,
+                       port=dbport,
+                       user=dbuser,
+                       passwd=dbpasswd,
+                       db=dbdb)
 
-    result = pd.read_csv("result.csv")
-    result = result[['Datetime', 'itemid', 'clock', 'value_min', 'value_max', 'value_avg', 'num']]
-    result['Datetime'] = pd.to_datetime(result['Datetime'])
+    itemid = 30221
+    sql = '''select * from trends
+            where itemid=%s''' % itemid
+
+    result = pd.read_sql(sql, db)
+    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+
+    result.to_csv('/tmp/result.csv')
+
+    # result = pd.read_csv("result.csv")
+    # result = result[['Datetime', 'itemid', 'clock', 'value_min', 'value_max', 'value_avg', 'num']]
+    # result['Datetime'] = pd.to_datetime(result['Datetime'])
 
     time_step = 48
     time_ser = 12
@@ -272,8 +272,8 @@ if __name__ == "__main__":
     modelType = int(sys.argv[1])
     key = sys.argv[2] + " " + sys.argv[3]
     # itemid = sys.argv[2]
-    main(key, modelType)
-    # singleModel()
+    # main(key, modelType)
+    singleModel()
 
 #
 #     dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
