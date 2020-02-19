@@ -58,7 +58,7 @@ class forecastModel():
         optimizer = Adam(lr=lr)
         model.compile(loss="mean_squared_error", optimizer=optimizer)
         early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-        model.fit(trainX, trainy, batch_size=16, epochs=20, validation_split=0.1, callbacks=[early_stopping])
+        model.fit(trainX, trainy, batch_size=16, epochs=10, validation_split=0.1, callbacks=[early_stopping])
         return model
 
     def trainModel(self):
@@ -150,8 +150,8 @@ def modelLSTM(trainX, trainy, time_step):
 
     return model
 
-def getHostList(key):
-    fm = forecastModel()
+def getHostList(key, modelType):
+    fm = forecastModel(modelType=modelType)
     db = fm.initDB()
     sql = '''
         select t1.itemid, t1.name, t1.hostid, t2.host from items t1,
@@ -175,8 +175,8 @@ def getHostList(key):
             pass
 
 
-def main(key):
-    getHostList(key)
+def main(key, modelType):
+    getHostList(key, modelType)
 
 
 def singleModel():
@@ -272,7 +272,7 @@ if __name__ == "__main__":
     modelType = int(sys.argv[1])
     key = sys.argv[2] + " " + sys.argv[3]
     # itemid = sys.argv[2]
-    main(key)
+    main(key, modelType)
     # singleModel()
 
 #
