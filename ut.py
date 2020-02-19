@@ -58,7 +58,7 @@ class forecastModel():
         optimizer = Adam(lr=lr)
         model.compile(loss="mean_squared_error", optimizer=optimizer)
         early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-        model.fit(trainX, trainy, batch_size=16, epochs=10, validation_split=0.1, callbacks=[early_stopping])
+        model.fit(trainX, trainy, batch_size=16, epochs=100, validation_split=0.1, callbacks=[early_stopping])
         return model
 
     def trainModel(self):
@@ -146,7 +146,7 @@ def modelLSTM(trainX, trainy, time_step):
     optimizer = Adam(lr=lr)
     model.compile(loss="mean_squared_error", optimizer=optimizer)
     early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-    lstm2 = model.fit(trainX, trainy, batch_size=16, epochs=10, validation_split=0.1, callbacks=[early_stopping])
+    lstm2 = model.fit(trainX, trainy, batch_size=16, epochs=100, validation_split=0.1, callbacks=[early_stopping])
 
     return model
 
@@ -162,6 +162,7 @@ def getHostList(key, modelType):
     hosts = list(result['host'].values)
 
     for itemid, host in zip(itemsid,  hosts):
+        print(host, itemid)
         fm.model = None
         fm.itemid = itemid
         fm.host = host
@@ -181,30 +182,30 @@ def main(key, modelType):
 
 def singleModel():
 
-    dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
-    dbport = 3306
-    dbuser = "jnczabbix"
-    dbpasswd = "W2df6s9&GA^iVKCI"
-    dbdb = "zabbix"
+    # dbhost = "jnc-zabbix.cotpwdfxy0tl.rds.cn-northwest-1.amazonaws.com.cn"
+    # dbport = 3306
+    # dbuser = "jnczabbix"
+    # dbpasswd = "W2df6s9&GA^iVKCI"
+    # dbdb = "zabbix"
+    #
+    # db = pymysql.connect(host=dbhost,
+    #                    port=dbport,
+    #                    user=dbuser,
+    #                    passwd=dbpasswd,
+    #                    db=dbdb)
+    #
+    # itemid = 30221
+    # sql = '''select * from trends
+    #         where itemid=%s''' % itemid
+    #
+    # result = pd.read_sql(sql, db)
+    # result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+    #
+    # result.to_csv('/tmp/result.csv')
 
-    db = pymysql.connect(host=dbhost,
-                       port=dbport,
-                       user=dbuser,
-                       passwd=dbpasswd,
-                       db=dbdb)
-
-    itemid = 30221
-    sql = '''select * from trends
-            where itemid=%s''' % itemid
-
-    result = pd.read_sql(sql, db)
-    result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-
-    result.to_csv('/tmp/result.csv')
-
-    # result = pd.read_csv("result.csv")
-    # result = result[['Datetime', 'itemid', 'clock', 'value_min', 'value_max', 'value_avg', 'num']]
-    # result['Datetime'] = pd.to_datetime(result['Datetime'])
+    result = pd.read_csv("result.csv")
+    result = result[['Datetime', 'itemid', 'clock', 'value_min', 'value_max', 'value_avg', 'num']]
+    result['Datetime'] = pd.to_datetime(result['Datetime'])
 
     time_step = 48
     time_ser = 12
@@ -242,14 +243,14 @@ def singleModel():
     testX = dataX[int(size*ratio):]
     testy = datay[int(size*ratio):]
 
-    if modelType == 1:
-        model = modelLSTM(trainX, trainy, time_step)
-    if modelType == 2:
-        model = modelXGB(trainX, trainy)
-
-    predicted = model.predict(trainX)
-
-    print(predicted)
+    # if modelType == 1:
+    #     model = modelLSTM(trainX, trainy, time_step)
+    # if modelType == 2:
+    #     model = modelXGB(trainX, trainy)
+    #
+    # predicted = model.predict(trainX)
+    #
+    # print(predicted)
     # for i in range(size-time_step-1):
     #     x = X[i:i+time_step]
     #     y = X[i+time_step+time_ser]
@@ -257,7 +258,7 @@ def singleModel():
     #     datay.append(y.tolist())
 
     plt.figure()
-    plt.plot(predicted, color='r', label='predicted_data')
+    # plt.plot(predicted, color='r', label='predicted_data')
     plt.plot(trainy, color='b', label='real_data')
     plt.legend()
     plt.show()
