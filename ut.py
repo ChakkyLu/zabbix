@@ -120,7 +120,8 @@ class forecastModel():
                 result['Hour'] = result['Datetime'].dt.hour
                 dataX = list(result["value_avg"].values)[::-1]
                 dataX.append(result.iloc[-1]['Hour']+self.time_ser)
-                # print(dataX)
+                print(dataX)
+                print(self.itemid)
                 forecastValue = self.model.predict(dataX)
                 # print(forecastValue)
                 return forecastValue
