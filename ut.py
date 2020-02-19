@@ -89,7 +89,7 @@ class forecastModel():
 
 
         if self.modelType == 1:
-            dataX = dataX.reshape(size, time_step+1, 1)
+            dataX = dataX.reshape(size, self.time_step+1, 1)
             datay = np.array(datay).reshape(len(datay),1)
 
         trainX = dataX[0:int(size*self.ratio)]
@@ -101,7 +101,7 @@ class forecastModel():
 
         if size:
             if self.modelType == 1:
-                model = self.modelLSTM(trainX, trainy, time_step)
+                model = self.modelLSTM(trainX, trainy, self.time_step)
             if self.modelType == 2:
                 model = self.modelXGB(trainX, trainy)
 
