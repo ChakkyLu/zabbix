@@ -72,8 +72,6 @@ class forecastModel():
         for h_shift in range(self.time_ser, self.time_ser + self.time_step):
             result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
 
-        print("DEBUG")
-
         result = result.dropna().reset_index(drop=True)
         result['Hour'] = result['Datetime'].dt.hour
         trainCol = list(result.columns.values)
@@ -166,14 +164,14 @@ def getHostList(key, modelType):
         fm.model = None
         fm.itemid = itemid
         fm.host = host
-        try:
-            fm.trainModel()
-            forecastValue = fm.predict()
-            if forecastValue:
-                print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
-        except:
-            pass
+        # try:
+        fm.trainModel()
+        forecastValue = fm.predict()
+        if forecastValue:
+            print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+            os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
+        # except:
+        #     pass
 
 
 def main(key, modelType):
