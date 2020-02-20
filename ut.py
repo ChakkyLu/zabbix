@@ -58,7 +58,7 @@ class forecastModel():
         optimizer = Adam(lr=lr)
         model.compile(loss="mean_squared_error", optimizer=optimizer)
         early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-        model.fit(trainX, trainy, batch_size=16, epochs=100, validation_split=0.1, callbacks=[early_stopping])
+        model.fit(trainX, trainy, batch_size=16, epochs=10, validation_split=0.1, callbacks=[early_stopping])
         return model
 
     def trainModel(self):
@@ -172,7 +172,7 @@ def getHostList(key, modelType, name):
             forecastValue = fm.predict()
             if forecastValue:
                 print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue)))
+                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
         except:
             pass
 
