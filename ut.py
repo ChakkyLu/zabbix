@@ -68,6 +68,7 @@ class forecastModel():
         result = pd.read_sql(sql, db)
 
         result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
+        result['value_avg'] = result['value_avg'] / 100
 
         for h_shift in range(self.time_ser, self.time_ser + self.time_step):
             result['target_' + str(h_shift)] = result["value_avg"].shift(h_shift)
@@ -146,11 +147,11 @@ def modelLSTM(trainX, trainy, time_step):
     optimizer = Adam(lr=lr)
     model.compile(loss="mean_squared_error", optimizer=optimizer)
     early_stopping = EarlyStopping(monitor='val_loss', mode='auto', patience=20)
-    lstm2 = model.fit(trainX, trainy, batch_size=16, epochs=100, validation_split=0.1, callbacks=[early_stopping])
+    lstm2 = model.fit(trainX, trainy, batch_size=16, epochs=10, validation_split=0.1, callbacks=[early_stopping])
 
     return model
 
-def getHostList(key, modelType):
+def getHostList(key, modelType, name):
     fm = forecastModel(modelType=modelType)
     db = fm.initDB()
     sql = '''
@@ -166,18 +167,18 @@ def getHostList(key, modelType):
         fm.model = None
         fm.itemid = itemid
         fm.host = host
-        # try:
-        fm.trainModel()
-        forecastValue = fm.predict()
-        if forecastValue:
-            print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-            os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.cpu_ut -o %s" % (host, str(forecastValue)))
-        # except:
-        #     pass
+        try:
+            fm.trainModel()
+            forecastValue = fm.predict()
+            if forecastValue:
+                print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue)))
+        except:
+            pass
 
 
-def main(key, modelType):
-    getHostList(key, modelType)
+def main(key, modelType, name):
+    getHostList(key, modelType, name)
 
 
 def singleModel():
@@ -201,11 +202,13 @@ def singleModel():
     # result = pd.read_sql(sql, db)
     # result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
     #
+    #
     # result.to_csv('/tmp/result.csv')
 
     result = pd.read_csv("result.csv")
     result = result[['Datetime', 'itemid', 'clock', 'value_min', 'value_max', 'value_avg', 'num']]
     result['Datetime'] = pd.to_datetime(result['Datetime'])
+    result['value_avg'] = result['value_avg'] / 100
 
     time_step = 48
     time_ser = 12
@@ -243,14 +246,14 @@ def singleModel():
     testX = dataX[int(size*ratio):]
     testy = datay[int(size*ratio):]
 
-    # if modelType == 1:
-    #     model = modelLSTM(trainX, trainy, time_step)
-    # if modelType == 2:
-    #     model = modelXGB(trainX, trainy)
-    #
-    # predicted = model.predict(trainX)
-    #
-    # print(predicted)
+    if modelType == 1:
+        model = modelLSTM(trainX, trainy, time_step)
+    if modelType == 2:
+        model = modelXGB(trainX, trainy)
+
+    predicted = model.predict(trainX)
+
+    print(predicted)
     # for i in range(size-time_step-1):
     #     x = X[i:i+time_step]
     #     y = X[i+time_step+time_ser]
@@ -258,7 +261,7 @@ def singleModel():
     #     datay.append(y.tolist())
 
     plt.figure()
-    # plt.plot(predicted, color='r', label='predicted_data')
+    plt.plot(predicted, color='r', label='predicted_data')
     plt.plot(trainy, color='b', label='real_data')
     plt.legend()
     plt.show()
@@ -273,7 +276,7 @@ if __name__ == "__main__":
     modelType = int(sys.argv[1])
     key = sys.argv[2] + " " + sys.argv[3]
     # itemid = sys.argv[2]
-    main(key, modelType)
+    main(key, modelType, sys.argv[2])
     # singleModel()
 
 #
