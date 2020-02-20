@@ -118,9 +118,9 @@ class forecastModel():
             result = pd.read_sql(sql, db)
             if len(result)>0:
                 result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
-                # result['Hour'] = result['Datetime'].dt.hour
+                result['Hour'] = result['Datetime'].dt.hour
                 dataX = list(result["value_avg"].values)[::-1]
-                # dataX.append(result.iloc[-1]['Hour']+self.time_ser)
+                dataX.append(result.iloc[-1]['Hour']+self.time_ser)
                 if self.modelType == 1:
                     dataX = np.array(dataX).reshape(1,self.time_step,1)
                 print(dataX)
