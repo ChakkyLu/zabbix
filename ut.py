@@ -122,7 +122,7 @@ class forecastModel():
                 dataX = list(result["value_avg"].values)[::-1]
                 dataX.append(result.iloc[-1]['Hour']+self.time_ser)
                 if self.modelType == 1:
-                    dataX = np.array(dataX).reshape(1,self.time_step,1)
+                    dataX = np.array(dataX).reshape(1,self.time_step+1,1)
                 print(dataX)
                 print(self.itemid)
                 forecastValue = self.model.predict(dataX)
