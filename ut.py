@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pymysql
 from sqlalchemy import create_engine
 import pandas as pd
@@ -170,16 +172,16 @@ def getHostList(key, modelType, name):
         fm.model = None
         fm.itemid = itemid
         fm.host = host
-        # try:
-        fm.trainModel()
-        forecastValue = fm.predict()
-        if forecastValue:
-            forecastValue = forecastValue[0][0]
-            print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-            print("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
-            os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
-        # except:
-        #     pass
+        try:
+            fm.trainModel()
+            forecastValue = fm.predict()
+            if forecastValue:
+                forecastValue = forecastValue[0][0]
+                print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+                print("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
+                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
+        except:
+            pass
 
 
 def main(key, modelType, name):
