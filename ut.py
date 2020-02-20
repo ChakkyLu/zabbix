@@ -167,14 +167,14 @@ def getHostList(key, modelType, name):
         fm.model = None
         fm.itemid = itemid
         fm.host = host
-        try:
-            fm.trainModel()
-            forecastValue = fm.predict()
-            if forecastValue:
-                print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
-                os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
-        except:
-            pass
+        # try:
+        fm.trainModel()
+        forecastValue = fm.predict()
+        if forecastValue:
+            print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+            os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
+        # except:
+        #     pass
 
 
 def main(key, modelType, name):
