@@ -119,6 +119,7 @@ class forecastModel():
             if len(result)>0:
                 result['Datetime'] = pd.to_datetime(result['clock'], unit='s')
                 result['Hour'] = result['Datetime'].dt.hour
+                result['value_avg'] = result['value_avg'] / 100
                 dataX = list(result["value_avg"].values)[::-1]
                 dataX.append(result.iloc[-1]['Hour']+self.time_ser)
                 if self.modelType == 1:
