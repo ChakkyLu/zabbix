@@ -171,9 +171,11 @@ def getHostList(key, modelType, name):
         fm.host = host
         # try:
         fm.trainModel()
-        forecastValue = fm.predict()
+        forecastValue = fm.predict()[0][0]
         if forecastValue:
+
             print("Host: %s, forecastValue: %s" % (host, str(forecastValue)))
+            print("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
             os.system("zabbix_sender -z 172.32.5.147 -s '%s' -k forecast.%s -o %s" % (host, name, str(forecastValue*100)))
         # except:
         #     pass
