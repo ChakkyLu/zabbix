@@ -17,6 +17,7 @@ agentid = 1000103
 token_url='https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=' + corpid + '&corpsecret=' + appsecret
 req = requests.get(token_url)
 accesstoken = req.json()['access_token']
+print(accesstoken)
 
 # send message
 msgsend_url='https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + accesstoken
@@ -38,5 +39,6 @@ params={
 }
 
 req=requests.post(msgsend_url, data=json.dumps(params))
+# print()
 
 logging.info('sendto:' + touser + ';;subject:' + subject + ';;message:' + message
