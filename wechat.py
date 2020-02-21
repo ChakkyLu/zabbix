@@ -19,19 +19,24 @@ req = requests.get(token_url)
 accesstoken = req.json()['access_token']
 
 # send message
-send_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + accesstoken
-user = sys.argv[1]
-subject = sys.argv[2]
-message = sys.argv[3]
+msgsend_url='https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=' + accesstoken
 
-params = {
-    'tosuer' : user,
-    'msgtype': "text",
-    'agentid': agentid,
-    'text': {
-        'content': message
-    },
-    'safe': 0
+touser=sys.argv[1]
+subject=sys.argv[2]
+#toparty='3|4|5|6'
+message=sys.argv[3]
+
+params={
+        "touser": touser,
+#       "toparty": toparty,
+        "msgtype": "text",
+        "agentid": agentid,
+        "text": {
+                "content": message
+        },
+        "safe":0
 }
-req = requests.post(send_url, data=json.dumps(params))
-logging.info('send to:' + user + ';;subject:' + subject + ';;message:' + message)
+
+req=requests.post(msgsend_url, data=json.dumps(params))
+
+logging.info('sendto:' + touser + ';;subject:' + subject + ';;message:' + message
