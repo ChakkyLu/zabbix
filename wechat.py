@@ -11,7 +11,7 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG, format = '%(asctime)s, %(filname)s, %(levelname)s, %(message)s', datefmt = '%a, %d %b %Y %H:%M:%S', filename = os.path.join('/home/ec2-user/zabbix', 'wechat.log'), filemode='a')
 corpid = 'wxaeecca9380ad4574'
-appsecrer = 'TaSWQvWpazt5auRuU6LMRyEb5WwjiWWX44o_rALG8nM'
+appsecret = 'TaSWQvWpazt5auRuU6LMRyEb5WwjiWWX44o_rALG8nM'
 agentid = 1000103
 token_url='https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=' + corpid + '&corpsecret=' + appsecret
 req = requests.get(token_url)
