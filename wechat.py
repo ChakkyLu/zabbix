@@ -9,7 +9,7 @@ import os
 import json
 import logging
 
-logging.basicConfig = logging.DEBUG, format = '%(asctime)s, %(filname)s, %(levelname)s, %(message)s', datefmt = '%a, %d %b %Y %H:%M:%S', filename = os.path.join('/home/ec2-user/zabbix', 'wechat.log', filemode='a')
+logging.basicConfig(level=logging.DEBUG, format = '%(asctime)s, %(filname)s, %(levelname)s, %(message)s', datefmt = '%a, %d %b %Y %H:%M:%S', filename = os.path.join('/home/ec2-user/zabbix', 'wechat.log'), filemode='a')
 corpid = 'wxaeecca9380ad4574'
 appsecrer = 'TaSWQvWpazt5auRuU6LMRyEb5WwjiWWX44o_rALG8nM'
 agentid = 1000103
